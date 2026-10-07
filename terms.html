@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - JesChat Studio</title>
+    <meta name="description" content="Terms of Service for JesChat Studio desktop streaming and moderation software.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0e14;
+            --surface: #141923;
+            --surface-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f0f3f8;
+            --text-muted: #9ba3b4;
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --accent: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.7;
+            padding: 0;
+            margin: 0;
+        }
+
+        header {
+            border-bottom: 1px solid var(--surface-border);
+            background: rgba(20, 25, 35, 0.85);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-badge {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #fff;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 48px auto 96px;
+            padding: 0 24px;
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--surface-border);
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .meta-date {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #fff;
+            margin-top: 36px;
+            margin-bottom: 14px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: var(--text-muted);
+            font-size: 1.02rem;
+        }
+
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 24px;
+            color: var(--text-muted);
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: var(--text-main);
+        }
+
+        .callout {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 24px 0;
+        }
+
+        a {
+            color: var(--primary-light);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        a:hover {
+            color: #fff;
+        }
+
+        footer {
+            border-top: 1px solid var(--surface-border);
+            padding: 36px 24px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background: var(--surface);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="/" class="logo">
+            <span>JesChat Studio</span>
+            <span class="logo-badge">Live</span>
+        </a>
+        <nav>
+            <a href="/" class="nav-link">Home</a>
+            <span style="color: var(--surface-border); margin: 0 10px;">|</span>
+            <a href="/privacy.html" class="nav-link">Privacy Policy</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <div class="page-header">
+        <h1>Terms of Service</h1>
+        <div class="meta-date">Last Updated: October 7, 2026 &bull; Version 1.0</div>
+    </div>
+
+    <p>
+        Welcome to <strong>JesChat Studio</strong>. By downloading, accessing, or using the JesChat desktop software application or related web tools ("Software", "Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use the Software.
+    </p>
+
+    <h2>1. Description of Software</h2>
+    <p>
+        JesChat Studio is a local desktop client software designed for live video game streamers and digital content creators. It provides live stream chat overlay widgets (for OBS Studio and other broadcast tools), customizable on-screen alerts, multi-platform chat aggregation, and real-time live chat moderation for platforms including YouTube and Twitch.
+    </p>
+
+    <h2>2. License and Usage Rights</h2>
+    <p>
+        We grant you a revocable, non-exclusive, non-transferable, limited license to download, install, and execute the Software locally on your personal computer solely for your personal and commercial live streaming and content creation activities, subject to these Terms.
+    </p>
+
+    <h2>3. Third-Party Platform Policies</h2>
+    <p>
+        JesChat integrates with third-party application programming interfaces (APIs) provided by YouTube and Twitch. By using JesChat to interact with these platforms, you agree to comply with their respective terms of service and community guidelines:
+    </p>
+    <ul>
+        <li><strong>YouTube:</strong> By utilizing YouTube live stream features or signing in with Google, you agree to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer">YouTube Terms of Service</a> and Google Privacy Policy.</li>
+        <li><strong>Twitch:</strong> By utilizing Twitch chat or authentication, you agree to adhere to the <a href="https://www.twitch.tv/p/legal/terms-of-service/" target="_blank" rel="noopener noreferrer">Twitch Terms of Service</a>.</li>
+    </ul>
+
+    <h2>4. Acceptable Conduct</h2>
+    <p>
+        You agree to use JesChat in compliance with all applicable local and international laws. You agree not to:
+    </p>
+    <ul>
+        <li>Use the Software to spam, harass, defame, or abuse live stream viewers or creators.</li>
+        <li>Attempt to reverse-engineer, modify, or inject malicious code designed to disrupt external API services.</li>
+        <li>Violate any applicable rate limits, quotas, or developer policies established by Google, YouTube, or Twitch.</li>
+    </ul>
+
+    <h2>5. Local Data Storage & User Security</h2>
+    <p>
+        JesChat operates locally on your device. You are solely responsible for maintaining the physical and digital security of your personal computer, including safeguarding configuration files containing API tokens (<code>connection.json</code>).
+    </p>
+
+    <h2>6. Disclaimer of Warranties</h2>
+    <p>
+        The Software is provided on an <strong>"AS IS"</strong> and <strong>"AS AVAILABLE"</strong> basis, without warranties of any kind, whether express or implied, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, or uninterrupted availability. We do not warrant that the Software will be error-free or that access to third-party streaming APIs will be uninterrupted.
+    </p>
+
+    <h2>7. Limitation of Liability</h2>
+    <p>
+        To the maximum extent permitted by applicable law, in no event shall the developer of JesChat Studio be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, goodwill, or broadcast revenue, arising out of or related to your use of or inability to use the Software.
+    </p>
+
+    <h2>8. Changes to Terms</h2>
+    <p>
+        We reserve the right to modify or replace these Terms at any time. Any changes will be posted on this page with an updated "Last Updated" date. Your continued use of the Software following the posting of any changes constitutes acceptance of those revisions.
+    </p>
+
+    <h2>9. Contact Information</h2>
+    <p>
+        For inquiries regarding these Terms of Service, please contact:
+    </p>
+    <ul>
+        <li><strong>Email:</strong> <a href="mailto:jestr.sr@gmail.com">jestr.sr@gmail.com</a></li>
+        <li><strong>Website:</strong> <a href="https://jeschat.live">https://jeschat.live</a></li>
+    </ul>
+</main>
+
+<footer>
+    <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+    </div>
+    <div>&copy; 2026 JesChat Studio. All rights reserved.</div>
+</footer>
+
+</body>
+</html>

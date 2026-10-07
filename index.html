@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JesChat Studio — Live Stream Chat Overlay & Moderation Dock</title>
+    <meta name="description" content="JesChat Studio is a free, local-first live stream chat overlay and moderation dock for Twitch and YouTube Live streamers. OBS ready and fully customizable.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #090b10;
+            --surface: #111520;
+            --surface-hover: #161c2b;
+            --border: rgba(255, 255, 255, 0.08);
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-red: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Top glow effect */
+        .glow-sphere {
+            position: absolute;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, rgba(168, 85, 247, 0.08) 50%, transparent 80%);
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        header {
+            position: relative;
+            z-index: 10;
+            border-bottom: 1px solid var(--border);
+            background: rgba(17, 21, 32, 0.7);
+            backdrop-filter: blur(12px);
+        }
+
+        .header-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-badge {
+            background: var(--primary-gradient);
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #fff;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Hero */
+        .hero {
+            position: relative;
+            z-index: 1;
+            max-width: 960px;
+            margin: 90px auto 70px;
+            padding: 0 24px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #c7d2fe;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 999px;
+            margin-bottom: 24px;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #10b981;
+        }
+
+        .hero h1 {
+            font-size: 3.4rem;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1.2px;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .hero-gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 720px;
+            margin: 0 auto 36px;
+            font-weight: 400;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: #fff;
+            font-size: 1.05rem;
+            font-weight: 700;
+            padding: 14px 32px;
+            border-radius: 10px;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.45);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            font-size: 1.05rem;
+            font-weight: 600;
+            padding: 14px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-hover);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Features Section */
+        .features {
+            position: relative;
+            z-index: 1;
+            max-width: 1120px;
+            margin: 60px auto 100px;
+            padding: 0 24px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 32px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 18px;
+            display: inline-block;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.98rem;
+            line-height: 1.6;
+        }
+
+        /* Security banner */
+        .security-banner {
+            max-width: 1120px;
+            margin: 0 auto 100px;
+            padding: 0 24px;
+        }
+
+        .security-box {
+            background: linear-gradient(180deg, rgba(20, 25, 38, 0.9) 0%, rgba(13, 17, 26, 0.9) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            border-radius: 16px;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .security-text h3 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .security-text p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 650px;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 48px 24px;
+            background: var(--surface);
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .footer-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .compliance-note {
+            max-width: 1120px;
+            margin: 24px auto 0;
+            font-size: 0.85rem;
+            color: #64748b;
+            line-height: 1.5;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.3rem; }
+            .hero p { font-size: 1.05rem; }
+            .header-inner { flex-direction: column; gap: 16px; }
+            .footer-inner { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glow-sphere"></div>
+
+<header>
+    <div class="header-inner">
+        <a href="/" class="logo">
+            <span>JesChat Studio</span>
+            <span class="logo-badge">Live</span>
+        </a>
+        <nav>
+            <a href="#features" class="nav-link">Features</a>
+            <a href="/privacy.html" class="nav-link">Privacy Policy</a>
+            <a href="/terms.html" class="nav-link">Terms</a>
+            <a href="https://github.com" class="nav-btn" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="pulse-dot"></span>
+            <span>Version 2.0 &bull; Twitch & YouTube Live Ready</span>
+        </div>
+        <h1>The Ultimate Modular Chat & <br><span class="hero-gradient-text">Streamer Moderation Dock</span></h1>
+        <p>
+            JesChat Studio is a lightweight, local desktop application engineered for live streamers. Render gorgeous OBS chat overlays and moderate your broadcasts with one-click timeouts and deletions.
+        </p>
+        <div class="hero-actions">
+            <a href="/privacy.html" class="btn-primary">View Privacy Policy</a>
+            <a href="#features" class="btn-secondary">Explore Features</a>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="section-header">
+            <h2>Built for Serious Streamers</h2>
+            <p>Everything you need for clean chat interactions, zero bloat.</p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon">⚡</div>
+                <h3>Unified Multi-Platform Chat</h3>
+                <p>
+                    Combine Twitch chat and YouTube Live streams into a single responsive feed. Track viewer badges, subscriptions, Super Chats, and channel sponsors in real-time.
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🛡️</div>
+                <h3>One-Click Moderation Dock</h3>
+                <p>
+                    Take action instantly from the streamer dock: delete spam messages, issue temporary timeouts, or ban disruptive users directly across connected platforms without leaving your game.
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🎨</div>
+                <h3>Fully Customizable OBS Overlays</h3>
+                <p>
+                    Embed stylish browser sources into OBS Studio, Streamlabs, or vMix. Switch between Cyberpunk, Pastel, or Dark themes, or fine-tune custom CSS styles and avatar animations.
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🔒</div>
+                <h3>100% Local & Privacy-First</h3>
+                <p>
+                    JesChat runs strictly on your machine. No telemetry servers, no data harvesting, no analytics beacons. Your OAuth tokens never leave your personal computer.
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">💎</div>
+                <h3>Monetization & Event Alerts</h3>
+                <p>
+                    Highlight YouTube Super Chats, Super Stickers, Channel Memberships, and Twitch bits with distinct color accents and badges to celebrate your supporters.
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🚀</div>
+                <h3>Zero Latency Architecture</h3>
+                <p>
+                    Built with asynchronous Python WebSockets and native browser rendering to ensure ultra-low CPU/RAM footprint during demanding gaming streams.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="security-banner">
+        <div class="security-box">
+            <div class="security-text">
+                <h3>Committed to Security & Transparency</h3>
+                <p>
+                    We respect your privacy. JesChat connects directly to official Google and Twitch endpoints using secure TLS encryption. Read our comprehensive disclosures on data protection and zero AI-training.
+                </p>
+            </div>
+            <div>
+                <a href="/privacy.html" class="btn-secondary">Read Privacy Disclosures &rarr;</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="footer-inner">
+        <div>
+            <strong>JesChat Studio</strong> &bull; &copy; 2026 All rights reserved.
+        </div>
+        <ul class="footer-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/privacy.html">Privacy Policy</a></li>
+            <li><a href="/terms.html">Terms of Service</a></li>
+            <li><a href="mailto:jestr.sr@gmail.com">Contact Developer</a></li>
+        </ul>
+    </div>
+    <div class="compliance-note">
+        <strong>Notice:</strong> JesChat's use and transfer to any other app of information received from Google APIs adheres to the 
+        <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer" style="color: #94a3b8; text-decoration: underline;">Google API Services User Data Policy</a>, including the Limited Use requirements. YouTube is a trademark of Google LLC.
+    </div>
+</footer>
+
+</body>
+</html>
